@@ -60,6 +60,14 @@ function App() {
         setList(newList);
     }
 
+    const totalIncome = list.reduce((sum,item) => {
+        return item.type === "income" ? sum + item.amount : sum;
+    },0);
+    const totalExpense = list.reduce((sum,item) => {
+        return item.type === "expense" ? sum + item.amount : sum;
+    },0);
+    const balance = totalIncome - totalExpense;
+
     return (
         <>
             <h2>간단 가계부</h2>
@@ -119,7 +127,10 @@ function App() {
                         <tr key={index}>
                             <td>{item.type === "income" ? "수입" : "지출"}</td>
                             <td>{item.title}</td>
-                            <td>{item.type === "income" ? "+" : "-"}
+                            <td style={{
+                                color: item.type === "income" ? "blue" : "red",
+                            }}>
+                                {item.type === "income" ? "+" : "-"}
                                 {item.amount.toLocaleString()}
                             </td>
                             <td>
@@ -135,8 +146,10 @@ function App() {
                 })}
                 </tbody>
             </table>
-            <h3>수입 : 0원 / 지출 : 0원</h3>
-            <h3>잔액 : 0원</h3>
+            <h3>수입 : {totalIncome.toLocaleString()}원 / 지출 : {totalExpense.toLocaleString()}원</h3>
+            <h3 style={{
+                color: balance >= 0 ? "blue" : "red",
+            }}>잔액 : {balance.toLocaleString()}원</h3>
         </>
     );
 }
